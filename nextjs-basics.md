@@ -45,7 +45,7 @@
 - use the recommended defaults
   - uses app router, tailwind, typescript, eslint
 
-## Default Project Files
+### Default Project Files
 
 - you will see config files from your .gitignore all the way to the bottom
   - tsconfig.json -> configs for typescript
@@ -65,7 +65,7 @@
   - public -> for static files like images, videos, pdfs
   - app -> where your application lives (think src in vite/react)
 
-## App Directory
+### App Directory
 
 - page.tsx
   - the homepage
@@ -76,3 +76,54 @@
   - wraps all pages
 - globals.css -> styling
 - favicon.ico -> the icon of the app
+
+## Running your NextJS App
+
+```
+npm run dev
+```
+
+- can find this command in package.json (next dev -> note that we only used the "dev" part)
+- you can also ask your ai agent to do this
+- make sure you are in the root of your project directory when you run this command
+
+## AI Specific Updates
+
+- we have seen that there is an AGENTS.md and a CLAUDE.md file
+  - these are for your AI coding agents
+  - Claude code will automatically look for CLAUDE.md in your project
+  - other coding agents will look for AGENTS.md
+  - CLAUDE.md file refers to the AGENTS.md file, so we can just put everything in the AGENTS.md file
+  - these are basically instructions for your coding agents
+    - models are often trained on older data
+    - nextjs has tricky/subtle parts to it that coding agents often get wrong
+    - so you will see some default instructions that allow for the coding agent to update its knowledge on current next js docs
+    - you will see the instructions direct the agents to "node_modules/next/dist/docs/"
+    - this is in our project and we can visit this ourselves to see what information the agents will be consuming
+    - essentially, the agents do not have to go outside of the app to get the standard way of using your current version of nextjs used in the app
+    - the information here is actually very useful and would be a great read for deeper and complete understanding of nextjs in its current state
+
+### Browser Log Forwarding
+
+- as you are developing your app, there may be client side errors
+- previously you would have to go into your browser console, copy them, and give them to your AI coding agent
+- instead now you can enable in the next.config.js a browser to terminal option
+  - https://nextjs.org/blog/next-16-2-ai#browser-log-forwarding
+
+### Running your AI agent (Requires billing to Claude or Codex)
+
+- you need to run the agent in the terminal, it needs to start the dev server itself
+- end your dev server connection if its running and run claude
+- can say "start dev server"
+- it will run npm run dev for you
+- dev server will be running, but it will be managed by claude
+- now if there are errors, claude will be notified because it has access to the output of that dev server
+
+### Free local Agent:
+
+- if you dont have the money to access claude code, there are some free options
+- these require some set up, I also don't know how trust worthy these are
+- need to explore this in the future
+  1. Redirect Claude Code to Free AI Backends
+  2. Use "Free Claude Code" Open-Source Wrappers
+  3. Free Local Agents (Ollama)
