@@ -1,7 +1,7 @@
 # NextJS Basics
 
 - the traditional vite/react focus almost entirely on the front end
-  -- still need a seperate backend app like nodeJS to do things like update a database
+  - still need a seperate backend app like nodeJS to do things like update a database
 - server side allows us do to more computational heavy tasks, use api keys, interact with a database
 - a Next JS app has a client side and a server side, its a full stack framework
 - it uses "server components" and "client components"
@@ -31,7 +31,7 @@
 - you have to manually send the data from the browser to the api endponts
 - many times we might prefer using server actions instead
 - however there are cases you would want to use route handlers
-  -- web hooks (e.g. stripe, someone pays and stripe send information about the transaction. You need a place they can send it too)
+  - web hooks (e.g. stripe, someone pays and stripe send information about the transaction. You need a place they can send it too)
 
   ## Creating a NextJS app:
 
@@ -43,21 +43,21 @@
 - say yes to version
 - name app
 - use the recommended defaults
-  -- uses app router, tailwind, typescript, eslint
+  - uses app router, tailwind, typescript, eslint
 
 ## Default Project Files
 
 - you will see config files from your .gitignore all the way to the bottom
-  -- tsconfig.json -> configs for typescript
-  -- postcss.config.md -> used by tailwind
-  -- eslint.config.mjs -> linter
-  -- next.config.ts -> configs for nextjs itself
-  -- README.md -> quick description of what the app is doing
-  -- package.json -> description of our project, specifies dependencies
-  -- package-lock.json -> shows full tree of dependencies
-  -- .gitignore -> for data we dont want to upload to github e.g. env variables
-  -- AGENTS.md
-  -- CLAUDE.md -> AI coding agents
+  - tsconfig.json -> configs for typescript
+  - postcss.config.md -> used by tailwind
+  - eslint.config.mjs -> linter
+  - next.config.ts -> configs for nextjs itself
+  - README.md -> quick description of what the app is doing
+  - package.json -> description of our project, specifies dependencies
+  - package-lock.json -> shows full tree of dependencies
+  - .gitignore -> for data we dont want to upload to github e.g. env variables
+  - AGENTS.md
+  - CLAUDE.md -> AI coding agents
 
   Above the config files are the project directories:
   - next/types -> nextjs refers to this
@@ -68,11 +68,11 @@
 ## App Directory
 
 - page.tsx
-  -- the homepage
-  -- page.tsx is a special name that specifies this file as the home/main page of its directory
-  -- what ever we render here will be displayed on the root of the domain
+  - the homepage
+  - page.tsx is a special name that specifies this file as the home/main page of its directory
+  - what ever we render here will be displayed on the root of the domain
 
 - layout.tsx
-  -- wraps all pages
+  - wraps all pages
 - globals.css -> styling
 - favicon.ico -> the icon of the app
