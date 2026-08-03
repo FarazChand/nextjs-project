@@ -124,6 +124,6 @@ npm run dev
 - if you dont have the money to access claude code, there are some free options
 - these require some set up, I also don't know how trust worthy these are
 - need to explore this in the future, here are 3 options:
-  1\. Redirect Claude Code to Free AI Backends
-  2\. Use "Free Claude Code" Open-Source Wrappers
-  3\. Free Local Agents (Ollama)
+  1. Redirect Claude Code to Free AI Backends
+  2. Use "Free Claude Code" Open-Source Wrappers
+  3. Free Local Agents (Ollama)
