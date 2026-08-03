@@ -38,3 +38,41 @@
   ```
   npx create-next-app@latest
   ```
+
+- will start the creation of a nextjs app in the directory you are currently in
+- say yes to version
+- name app
+- use the recommended defaults
+  -- uses app router, tailwind, typescript, eslint
+
+## Default Project Files
+
+- you will see config files from your .gitignore all the way to the bottom
+  -- tsconfig.json -> configs for typescript
+  -- postcss.config.md -> used by tailwind
+  -- eslint.config.mjs -> linter
+  -- next.config.ts -> configs for nextjs itself
+  -- README.md -> quick description of what the app is doing
+  -- package.json -> description of our project, specifies dependencies
+  -- package-lock.json -> shows full tree of dependencies
+  -- .gitignore -> for data we dont want to upload to github e.g. env variables
+  -- AGENTS.md
+  -- CLAUDE.md -> AI coding agents
+
+  Above the config files are the project directories:
+  - next/types -> nextjs refers to this
+  - node_modules -> where the packages are installed
+  - public -> for static files like images, videos, pdfs
+  - app -> where your application lives (think src in vite/react)
+
+## App Directory
+
+- page.tsx
+  -- the homepage
+  -- page.tsx is a special name that specifies this file as the home/main page of its directory
+  -- what ever we render here will be displayed on the root of the domain
+
+- layout.tsx
+  -- wraps all pages
+- globals.css -> styling
+- favicon.ico -> the icon of the app
