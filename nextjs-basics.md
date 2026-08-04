@@ -246,6 +246,8 @@ Similar to react, we might not want to clutter our layout or homepage with too m
       }
   ```
 
+- then just return the jsx you want to render when the component tag is used
+
 ## Data Fetching in Server Components:
 
 - in a client side only react/vite type of application, you would have some kind of "useEffect" which would make an API call, the API would send back some data.
@@ -259,20 +261,111 @@ Similar to react, we might not want to clutter our layout or homepage with too m
   - the rendered component is then sent to the client side and displayed in the browser
 
 - we need to add the async keyword to the function signature
+
+```
+export default async function PostsPage() { ...component code here...}
+```
+
 - then we can just await fetch as usual, .json the response and map the data inside our component
+
+```
+  const response = await fetch("http://jsonplaceholder.typicode.com/posts");
+  const posts = await response.json();
+```
+
 - one benefit is being able to use api keys directly in the server component since it isnt exposed to the client - only the rendered result is. However, if this is a public github project its probably best to not expose the api in any component that will be stored in public view. But its worth noting
 
 ## Dynamic Routes
 
-- we might have a page route that leads to a page with a bunch of items a user can click on e.g. posts, with post items on the page
+- we might have a database with a posts array that contains a number of unique posts, and we might fetch that array and display each post title (and track the post id) on the /app/posts page.tsx
 - we would probably want each post item to lead to its own post page once clicked
-- we can do that with nextJS by using dynamic routes
+- we can do that with nextJS by using dynamic routes combined with the Link component:
+  - first, we would ensure that every post item on the /app/posts/page.tsx page would be wrapped in a Link component, and the src would direct to app/posts/theirId (can do this dynamically)
   - we create a directory within our app/posts directory, but we name it [id] -> app/posts/[id]
+  - this directory name specifies that this route is a dynamic route
   - the name within the brackets is optional, it is a variable that we use in the page component of that directory
+    - the variable represents the data we are using to identify the specific route, we refer to it as the "param" of the dynamic route (like parameters in urls)
+    - e.g. for posts - we want to go to a specific post, so the data we might use is the post id. So we might name the dynamic route directory [id], or [postId] etc
   - it represents the url endpoint of the post in this case, which we can use to fetch/specify data that we want to display from the posts array
-  - that being said, app/posts/[id]/page.tsx should be created, which is where we are going to store our dynamic component
+  - that being said, we need to create app/posts/[id]/page.tsx, which is where we are going to use our param to fetch data, and use that data to populate our dynamic component
   - this component is dynamic because it will have a general layout, but the content will differ depending on the endpoint of the url.
   - so if we think about our app/posts page, that page has a bunch of post items. Each post item is a Link that leads to a url with that post's id as the end point.
   - then that post id is used to either fetch the post itself, or used to find the post within the already fetched posts array (depends on how the data is stored)
 
 TODO : Make sure you go over dynamic routes and params, typing of params and how to use it thoroughly because its a really important topic
+
+### Using Params in the Dynamic Route:
+
+```
+type PostPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function PostPage({ params }: PostPageProps) {
+  const { id } = await params;
+
+  const response = await fetch(
+    `http://jsonplaceholder.typicode.com/posts/${id}`,
+  );
+  const post = await response.json();
+
+  return (
+    <article>
+      <div>
+        <h1>
+          {post.title.charAt(0).toUpperCase() + post.title.slice(1)}        // using the dynamic data here
+        </h1>
+        <p>{post.body}</p>                                                  // and here
+      </div>
+    </article>
+
+  );
+}
+```
+
+- the component must be async
+- we can destructure params from the props object
+- its type is a Promise that will return an object that contains the param variable we used as the dynamic route name e.g. [id] - and its type
+- we then have to await params (its a resolving promise), which will return an object that we can destructure our param variable from e.g. {id}
+- then we simply use that param varaible to fetch the desired data from our database. Normal async await .json stuff.
+- once we get our response data, we can use that to populate the component
+- so this one dynamic route can represent as many unique posts as our database has, as long as they have a unique id.
+
+Note you might also require search params for some use cases e.g. /clothes/cool-shirt?color=blue
+
+- we dont need to go into this right now, but its pretty straight forward - you just deconstruct searchParams as well and it allows you to use its value in the dynamic route
+
+### Dealing with bad URLs for the dynamic route
+
+The user might also type an invalid URL, or maybe the resource they are looking for doesnt exist anymore. We might want a good UX in these cases, not just a default NextJS error page.
+
+- in our dynamic route component, after we attempt to get a response with .json, we can check to see if we got the response
+- can use the "notFound" function, which will redirect the user to a "not found" page
+
+- we can customize how the not found page looks by creating a not-found.tsx within the dynamic route directory.
+- it is essentially just a normal component, and we can customize it to display whatever information we want to convey to a user
+- the name of the component should be NotFound:
+
+```
+// /app/posts/[id]/not-found
+
+export default function NotFound() {
+  return (
+    <div>not-found</div>
+  )
+}
+```
+
+### error.tsx for data fetching problems
+
+- in the case where we try to fetch data and it fails for whatever reason, we can display a custom page for the dynamic route that informs the user of the situation
+- its similar to not-found, but we instead create an error.tsx within the dynmaic route directory e.g. /app/posts/[id]/error.tsx
+- error.tsx must have the "use client" directive at the top of the file.
+
+### loading.tsx for long loading
+
+- same thing as above, if fetching takes sometime, we can have a loading component render while that is happening.
+- /app/posts/[id]/error.tsx
+- does not need the "use client" directive
+
+Note: Both loading and error .tsx will automatically render their jsx when the situation calls for it as long as you have their .tsx files within the route you want them to work in.
