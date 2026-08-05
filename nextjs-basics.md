@@ -425,7 +425,7 @@ export default async function PostPage({params} : PostPageProps){
   - will feel snappier
   - it pre-renders some routes as static content
   - this is called static rendering, also called ssg (static site generation)
-  - all the pre fetched pages are ready as soon as anyone visits the website (after first load I mean)
+  - all the pre fetched pages are ready as soon as anyone visits, they have already been turned into html during the production build process and will be served that way to everyone that visits the website and any of the prefetched pages
 
 - some routes will not be pre-rendered, e.g. dynamic routes
   - these will be rendered on demand instead of pre rendered
