@@ -325,7 +325,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
 - the component must be async
 - we can destructure params from the props object
-- its type is a Promise that will return an object that contains the param variable we used as the dynamic route name e.g. [id] - and its type
+- its type is a Promise that will return an object that contains the param variable we used as the dynamic route name e.g. [id]
 - we then have to await params (its a resolving promise), which will return an object that we can destructure our param variable from e.g. {id}
 - then we simply use that param varaible to fetch the desired data from our database. Normal async await .json stuff.
 - once we get our response data, we can use that to populate the component
@@ -369,3 +369,75 @@ export default function NotFound() {
 - does not need the "use client" directive
 
 Note: Both loading and error .tsx will automatically render their jsx when the situation calls for it as long as you have their .tsx files within the route you want them to work in.
+
+## Interacting with our Own Database using an ORM
+
+- getting data from our own database is also typically done on the server side
+- so far we've been using the fetch API to fetch data from some third party endpoint
+- very often we have our own database, and we want to get data from there
+- often, we use an ORM to deal with our own database, e.g. prisma
+
+```
+// /app/posts/page.tsx
+
+// "fetching" the posts from our own database using the prisma ORM
+
+
+export default async PostsPage() {
+    // like fetch, but using prisma to get data from our own database
+    const posts = await prisma.post.findMany();
+
+    return (... jsx ...)
+}
+
+```
+
+```
+// /app/posts/[id]/page.tsx
+
+// getting the specifc post data based on the id
+
+type PostPageProps = {
+    id: Promise<{ id:string }>
+}
+
+export default async function PostPage({params} : PostPageProps){
+    const {id} = await params;
+
+    const post = await prisma.post.findUnique({
+        where : {
+            id: Number(id);   // need to cast into number, urls give string by default
+        }
+    });
+    if(!post) {     // adding gaurd to fix type issues (can return null)
+        notFound();
+    }
+
+    return (... jsx)
+}
+```
+
+## Caching
+
+- there is some default caching out of the box, which is apparent when we run a production build
+- we use npm run build to build the optimized version of the application
+- we use npm run start to run the production build
+  - will feel snappier
+  - it pre-renders some routes as static content
+  - this is called static rendering, also called ssg (static site generation)
+  - all the pre fetched pages are ready as soon as anyone visits the website (after first load I mean)
+
+- some routes will not be pre-rendered, e.g. dynamic routes
+  - these will be rendered on demand instead of pre rendered
+  - takes longer and takes more resources, less efficient
+  - its called dynamic rendering, SSR (server side rendering)
+  - the page has to be fetched everytime someone visits the page, doesn't get prefetched on first load - so less efficient
+- if you have a dynamic route, NextJS will opt out of static rendering for that page, and will make it dynamic
+- which makes sense, because the output of the dynamic route depends on the params - so the params must be known in order to render the page, so we need to wait for the user to pick the specific endpoint
+
+### generateStaicParams()
+
+- this function allows us to specify the specific endpoints of our dynamic route that we want to pre render
+- e.g. in a database of 1 million posts, we can specify the top 100 most popular posts and have those pre rendered and ready to display
+- this is done during the building of the production application
+- More information, youtube: Next.js CSR vs SSR vs SSG vs ISR and now PPR! by bytegrad
